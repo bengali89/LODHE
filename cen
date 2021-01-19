@@ -208,15 +208,14 @@ systemctl start openvpn@server.service
 systemctl status openvpn@server.service
 chkconfig openvpn on
 
-yum install -y squid
-cd /etc/squid/
-rm -f ./squid.conf
-wget https://raw.githubusercontent.com/bengali89/takey/main/Hsgskk/squid.conf
-chmod 0755 /etc/squid/squid.conf
-squid -z
-squid -s
-chkconfig squid on,
- 
+
+# install squid
+yum -y install squid
+wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/bengali89/takey/main/Hsgskk/squid.conf"
+sed -i $MYIP2 /etc/squid/squid.conf;
+systemctl restart squid
+systemctl enable squid
+
 
 # download script
 cd
