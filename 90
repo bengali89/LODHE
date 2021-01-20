@@ -259,9 +259,8 @@ dh dh.pem
 auth SHA512
 tls-crypt tc.key
 topology subnet
-verify-client-cert none
+plugin /etc/openvpn/openvpn-auth-pam.so /etc/pam.d/login
 username-as-common-name
-plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
 server 10.8.0.0 255.255.255.0" > /etc/openvpn/server/server.conf
 	# IPv6
 	if [[ -z "$ip6" ]]; then
