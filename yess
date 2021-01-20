@@ -258,37 +258,42 @@ function InsOpenVPN(){
  cat <<'myOpenVPNconf1' > /etc/openvpn/server_tcp.conf
 # XAMScript
 
-port MyOvpnPort1
-proto tcp
+port MyOvpnPort
 dev tun
+proto tcp
 ca ca.crt
 cert server.crt
 key server.key
 dh dh2048.pem
-plugin /etc/openvpn/openvpn-auth-pam.so /etc/pam.d/login
+cipher AES-128-CBC
+ncp-disable
+auth none
+comp-lzo
+plugin /etc/openvpn/openvpn-auth-pam.so login
 verify-client-cert none
 username-as-common-name
-script-security 3 system
-server 10.8.0.0 255.255.255.0
-ifconfig-pool-persist /etc/openvpn/ipp.txt
-push "redirect-gateway def1 bypass-dhcp"
-duplicate-cn
+max-clients 4000
+server 10.200.0.0 255.255.0.0
+tun-mtu 1500
+mssfix 1460
+reneg-sec 0
+sndbuf 393216
+rcvbuf 393216
+push "sndbuf 393216"
+push "rcvbuf 393216"
+push "route-method exe"
+push "route-delay 2"
+client-to-client
 keepalive 10 120
-# tls-auth ta.key 0
-comp-lzo
-max-clients 5
-persist-key
 persist-tun
-log /etc/openvpn/openvpn.log
-log-append /etc/openvpn/openvpn.log
+persist-key
+persist-remote-ip
+status /etc/openvpn/tcp_stats.log
+log /etc/openvpn/tcp.log
 verb 3
 script-security 2
 socket-flags TCP_NODELAY
 push "socket-flags TCP_NODELAY"
-push "dhcp-option DNS 1.0.0.1"
-push "dhcp-option DNS 1.1.1.1"
-push "dhcp-option DNS 8.8.4.4"
-push "dhcp-option DNS 8.8.8.8"
 myOpenVPNconf1
 cat <<'myOpenVPNconf2' > /etc/openvpn/server_udp.conf
 # XAMScript
